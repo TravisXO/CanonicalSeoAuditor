@@ -1,0 +1,77 @@
+﻿@model string
+@{
+    ViewData["Title"] = "New SEO Audit";
+}
+
+<!-- Loading Overlay -->
+<div id="loadingOverlay">
+    <div class="spinner-pulse mb-3"></div>
+    <h3 class="text-dark fw-bold">Analyzing Website...</h3>
+    <p class="text-muted">Crawling metadata, structure, and technical SEO metrics.</p>
+    <div class="progress mt-3" style="width: 300px; height: 6px;">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%"></div>
+    </div>
+    <small class="text-muted mt-2">This may take 5–10 seconds.</small>
+</div>
+
+<!-- Hero -->
+<div class="audit-hero">
+    <h2>Instant <span>SEO Audit</span></h2>
+    <p>Drop any URL and get a 12-point technical report in seconds — free, no login required.</p>
+</div>
+
+<!-- Audit Form Card -->
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary py-3">
+                    <h3 class="card-title mb-0" style="font-size:1.05rem;">
+                        <i class="bi bi-search me-2"></i>Start SEO Audit
+                    </h3>
+                </div>
+                <div class="card-body p-5">
+                    <p class="text-muted mb-4">
+                        Enter a full URL (including <code>http://</code> or <code>https://</code>) to generate a comprehensive 12-point SEO report.
+                    </p>
+
+                    @if (ViewBag.ErrorMessage != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>@ViewBag.ErrorMessage
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+
+                    <form asp-action="Run" method="post" id="auditForm">
+                        <div class="input-group input-group-lg mb-3 shadow-sm">
+                            <span class="input-group-text border-end-0">
+                                <i class="bi bi-link-45deg"></i>
+                            </span>
+                            <input type="url" name="url"
+                                   class="form-control border-start-0"
+                                   placeholder="https://example.com"
+                                   required autofocus style="border-left: 0;" />
+                            <button type="submit" class="btn btn-primary px-5 fw-bold">
+                                Analyze <i class="bi bi-arrow-right ms-1"></i>
+                            </button>
+                        </div>
+                        <div class="form-text">
+                            Example: <code>https://www.google.com</code>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-center py-3 border-0">
+                    <div class="audit-features">
+                        <span class="audit-feature-item"><i class="bi bi-check-circle-fill"></i> Metadata</span>
+                        <span class="audit-feature-item"><i class="bi bi-check-circle-fill"></i> Content</span>
+                        <span class="audit-feature-item"><i class="bi bi-check-circle-fill"></i> Technical</span>
+                        <span class="audit-feature-item"><i class="bi bi-check-circle-fill"></i> Accessibility</span>
+                        <span class="audit-feature-item"><i class="bi bi-check-circle-fill"></i> Social</span>
+                        <span class="audit-feature-item"><i class="bi bi-check-circle-fill"></i> Schema</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

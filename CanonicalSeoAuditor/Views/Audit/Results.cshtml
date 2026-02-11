@@ -1,0 +1,633 @@
+﻿@model SeoAuditor.Crawler.Models.SeoAuditResult
+@{
+    ViewData["Title"] = "Audit Results";
+}
+
+<div class="container mt-5 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="bi bi-shield-check text-primary"></i> SEO Audit Report</h1>
+        <div>
+            <a asp-action="Index" class="btn btn-outline-primary"><i class="bi bi-search"></i> New Audit</a>
+            <button class="btn btn-primary ms-2" onclick="window.print()"><i class="bi bi-printer"></i> Print</button>
+        </div>
+    </div>
+
+    <!-- SCORE DASHBOARD -->
+    <div class="card shadow border-0 mb-5">
+        <div class="card-body p-4">
+            <div class="row align-items-center">
+                <div class="col-md-4 text-center border-end">
+                    <h5 class="text-uppercase text-muted fw-bold small">Overall SEO Score</h5>
+                    <div class="score-circle @GetGradeClass(Model.Grade)">
+                        <div class="text-center">
+                            <h1 class="display-3 fw-bold mb-0">@Model.OverallScore</h1>
+                            <span class="fw-bold text-uppercase">@Model.Grade</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8 ps-md-5 mt-4 mt-md-0">
+                    <h5 class="mb-3 text-muted">Category Breakdown</h5>
+
+                    <div class="row">
+                        <!-- Left Column Scores -->
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <span><i class="bi bi-tags-fill text-primary me-2"></i> Metadata</span>
+                                    <strong>@Model.MetadataScore%</strong>
+                                </div>
+                                <div class="progress" style="height: 6px;"><div class="progress-bar @GetScoreColor(Model.MetadataScore)" style="width: @Model.MetadataScore%"></div></div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <span><i class="bi bi-layout-text-window-reverse text-info me-2"></i> Content</span>
+                                    <strong>@Model.ContentScore%</strong>
+                                </div>
+                                <div class="progress" style="height: 6px;"><div class="progress-bar @GetScoreColor(Model.ContentScore)" style="width: @Model.ContentScore%"></div></div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <span><i class="bi bi-tools text-secondary me-2"></i> Technical</span>
+                                    <strong>@Model.TechnicalScore%</strong>
+                                </div>
+                                <div class="progress" style="height: 6px;"><div class="progress-bar @GetScoreColor(Model.TechnicalScore)" style="width: @Model.TechnicalScore%"></div></div>
+                            </div>
+                        </div>
+                        <!-- Right Column Scores -->
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <span><i class="bi bi-share-fill text-primary me-2"></i> Social</span>
+                                    <strong>@Model.SocialScore%</strong>
+                                </div>
+                                <div class="progress" style="height: 6px;"><div class="progress-bar @GetScoreColor(Model.SocialScore)" style="width: @Model.SocialScore%"></div></div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <span><i class="bi bi-universal-access-circle text-warning me-2"></i> Accessibility</span>
+                                    <strong>@Model.AccessibilityScore%</strong>
+                                </div>
+                                <div class="progress" style="height: 6px;"><div class="progress-bar @GetScoreColor(Model.AccessibilityScore)" style="width: @Model.AccessibilityScore%"></div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- URL Header -->
+    <div class="card shadow-sm border-0 mb-4 bg-dark text-white">
+        <div class="card-body p-4">
+            <h6 class="text-uppercase opacity-75 small fw-bold">Auditing URL</h6>
+            <h2 class="text-break mb-1">@Model.Url</h2>
+            <p class="mb-0 small text-info"><i class="bi bi-calendar3"></i> @Model.AuditDate.ToString("f")</p>
+        </div>
+    </div>
+
+    <!-- 1. METADATA -->
+    <div class="row mb-5">
+        <div class="col-12"><h3 class="border-bottom pb-2 fw-bold text-secondary">1. Metadata</h3></div>
+
+        <div class="col-md-6 mb-3">
+            <div class="card h-100 shadow-sm card-meta">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="fw-bold">Title Tag <i class="bi bi-info-circle-fill info-icon" data-bs-toggle="tooltip" title="The blue headline that appears in Google search results. It should be catchy and 50-60 characters long."></i></h5>
+                        <span class="badge @GetStatusClass(Model.MetaTitleStatus)">@Model.MetaTitleStatus</span>
+                    </div>
+                    <p class="small text-muted border p-2 bg-light mt-2 rounded">@Model.MetaTitle</p>
+                    <small>@Model.MetaTitleLength characters</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <div class="card h-100 shadow-sm card-meta">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="fw-bold">Meta Description <i class="bi bi-info-circle-fill info-icon" data-bs-toggle="tooltip" title="The short summary under the headline in Google. It encourages people to click your link."></i></h5>
+                        <span class="badge @GetStatusClass(Model.MetaDescriptionStatus)">@Model.MetaDescriptionStatus</span>
+                    </div>
+                    <p class="small text-muted border p-2 bg-light mt-2 rounded">@Model.MetaDescription</p>
+                    <small>@Model.MetaDescriptionLength characters</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Expanded Metadata Features -->
+        <div class="col-md-3 mb-3">
+            <div class="card h-100 shadow-sm card-meta">
+                <div class="card-body">
+                    <h6 class="fw-bold">Robots <i class="bi bi-info-circle-fill info-icon" data-bs-toggle="tooltip" title="Instructions for Google. 'Index' means they can list you. 'NoIndex' means stay away."></i></h6>
+                    <span class="badge @GetStatusClass(Model.MetaRobotsStatus) w-100">@Model.MetaRobotsStatus</span>
+                    <small class="d-block mt-2 text-muted">@Model.MetaRobots</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card h-100 shadow-sm card-meta">
+                <div class="card-body">
+                    <h6 class="fw-bold">Viewport <i class="bi bi-info-circle-fill info-icon" data-bs-toggle="tooltip" title="Tells phones how to scale the page. Critical for mobile friendliness."></i></h6>
+                    <span class="badge @GetStatusClass(Model.MetaViewportStatus) w-100">@Model.MetaViewportStatus</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card h-100 shadow-sm card-meta">
+                <div class="card-body">
+                    <h6 class="fw-bold">Charset <i class="bi bi-info-circle-fill info-icon" data-bs-toggle="tooltip" title="Ensures special characters (like emojis or accents) display correctly. UTF-8 is standard."></i></h6>
+                    <span class="badge @GetStatusClass(Model.CharsetStatus) w-100">@Model.CharsetStatus</span>
+                    <small class="d-block mt-2 text-muted">@Model.Charset</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card h-100 shadow-sm card-meta">
+                <div class="card-body">
+                    <h6 class="fw-bold">Keywords <i class="bi bi-info-circle-fill info-icon" data-bs-toggle="tooltip" title="An obsolete tag. Google ignores it. Spammers use it. Best to remove it."></i></h6>
+                    <span class="badge @(Model.HasMetaKeywords ? "bg-warning text-dark" : "bg-success") w-100">@(Model.HasMetaKeywords ? "Found" : "Clean")</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. CONTENT STRUCTURE -->
+    <div class="row mb-5">
+        <div class="col-12"><h3 class="border-bottom pb-2 fw-bold text-secondary">2. Content Structure</h3></div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 shadow-sm card-meta">
+                <div class="card-body text-center">
+                    <h6 class="fw-bold">Word Count <i class="bi bi-info-circle-fill info-icon" data-bs-toggle="tooltip" title="Total words on the page. Too few (<300) may mean 'Thin Content'."></i></h6>
+                    <h2 class="my-2">@Model.WordCount</h2>
+                    <span class="badge @GetStatusClass(Model.WordCountStatus)">@Model.WordCountStatus</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 shadow-sm card-meta">
+                <div class="card-body text-center">
+                    <h6 class="fw-bold">H1 Tag <i class="bi bi-info-circle-fill info-icon" data-bs-toggle="tooltip" title="The main on-page headline. There should be exactly one per page."></i></h6>
+                    <h2 class="my-2">@Model.H1Count</h2>
+                    <span class="badge @GetStatusClass(Model.H1Status)">@Model.H1Status</span>
+                    <div class="small text-muted mt-2 text-truncate">@(Model.H1Contents.FirstOrDefault() ?? "None")</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 shadow-sm card-meta">
+                <div class="card-body text-center">
+                    <h6 class="fw-bold">Text/HTML Ratio <i class="bi bi-info-circle-fill info-icon" data-bs-toggle="tooltip" title="How much of your code is actual reading material vs. computer code. Higher is usually better."></i></h6>
+                    <h2 class="my-2">@Model.TextToHtmlRatio%</h2>
+                    <span class="badge @GetStatusClass(Model.RatioStatus)">@Model.RatioStatus</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Expanded Content Features -->
+        <div class="col-md-6 mb-3">
+            <div class="card h-100 shadow-sm card-meta">
+                <div class="card-body">
+                    <h6 class="fw-bold">Heading Structure <i class="bi bi-info-circle-fill info-icon" data-bs-toggle="tooltip" title="Your H1-H6 tags. They should form a logical outline, not skip levels (e.g., H2 to H4)."></i></h6>
+                    <span class="badge @GetStatusClass(Model.HeadingStructureStatus) mb-2">@Model.HeadingStructureStatus</span>
+                    @if (Model.HeadingIssues.Any())
+                    {
+                        <ul class="text-danger small mb-0 ps-3">
+                            @foreach (var i in Model.HeadingIssues)
+                            {
+                                <li>@i</li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+
+                        <div class="text-success small"><i class="bi bi-check"></i> Structure is logical.</div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <div class="card h-100 shadow-sm card-meta">
+                <div class="card-body">
+                    <h6 class="fw-bold">Paragraphs &amp; Lists <i class="bi bi-info-circle-fill info-icon" data-bs-toggle="tooltip" title="Checks if content is broken into readable chunks (p tags) and if lists are properly formatted."></i></h6>
+                    <div class="d-flex justify-content-between small mb-2">
+                        <span>Paragraphs: @Model.ParagraphCount</span>
+                        <span class="text-muted">@Model.ParagraphStatus</span>
+                    </div>
+                    <div class="d-flex justify-content-between small">
+                        <span>Orphan List Items: @Model.OrphanListItems</span>
+                        <span class="text-muted">@Model.ListStatus</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. IMAGES (Detailed) -->
+    <div class="row mb-5">
+        <div class="col-12"><h3 class="border-bottom pb-2 fw-bold text-secondary">3. Images</h3></div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 shadow-sm card-meta">
+                <div class="card-body">
+                    <h6 class="fw-bold">Alt Text <i class="bi bi-info-circle-fill info-icon" data-bs-toggle="tooltip" title="Descriptions for the blind and search engines. Every meaningful image needs this."></i></h6>
+                    <span class="badge @GetStatusClass(Model.ImageAltStatus)">@Model.ImageAltStatus</span>
+                    <p class="small mt-2 mb-0">Missing on: <strong>@Model.ImagesMissingAlt</strong> / @Model.TotalImages images</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 shadow-sm card-meta">
+                <div class="card-body">
+                    <h6 class="fw-bold">Dimensions <i class="bi bi-info-circle-fill info-icon" data-bs-toggle="tooltip" title="Width and Height attributes prevent the page from 'jumping' as images load (CLS)."></i></h6>
+                    <span class="badge @GetStatusClass(Model.ImageDimensionStatus)">@Model.ImageDimensionStatus</span>
+                    <p class="small mt-2 mb-0">Missing on: <strong>@Model.ImagesMissingDimensions</strong> images</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 shadow-sm card-meta">
+                <div class="card-body">
+                    <h6 class="fw-bold">Modern Formats <i class="bi bi-info-circle-fill info-icon" data-bs-toggle="tooltip" title="WebP and AVIF files load much faster than older JPG/PNG files."></i></h6>
+                    <span class="badge @GetStatusClass(Model.ImageFormatStatus)">@Model.ImageFormatStatus</span>
+                    <p class="small mt-2 mb-0">WebP/AVIF: <strong>@Model.ImagesModernFormat</strong> images</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 shadow-sm card-meta">
+                <div class="card-body">
+                    <h6 class="fw-bold">Lazy Loading <i class="bi bi-info-circle-fill info-icon" data-bs-toggle="tooltip" title="Delays loading off-screen images until the user scrolls to them. Speeds up initial load."></i></h6>
+                    <span class="badge @GetStatusClass(Model.ImageLazyLoadStatus)">@Model.ImageLazyLoadStatus</span>
+                    <p class="small mt-2 mb-0">Using 'lazy': <strong>@Model.ImagesLazyLoaded</strong> images</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 shadow-sm card-meta">
+                <div class="card-body">
+                    <h6 class="fw-bold">File Names <i class="bi bi-info-circle-fill info-icon" data-bs-toggle="tooltip" title="Filenames like 'red-shoes.jpg' are better for SEO than 'IMG_1234.jpg'."></i></h6>
+                    <span class="badge @GetStatusClass(Model.ImageFilenameStatus)">@Model.ImageFilenameStatus</span>
+                    <p class="small mt-2 mb-0">Generic/Bad: <strong>@Model.ImagesWithGenericNames</strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. SOCIAL MEDIA -->
+    <div class="row mb-5">
+        <div class="col-12"><h3 class="border-bottom pb-2 fw-bold text-secondary">4. Social Media (Open Graph)</h3></div>
+
+        <div class="col-md-6 mb-3">
+            <div class="card h-100 shadow-sm card-meta">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <h6 class="fw-bold">OG Title <i class="bi bi-info-circle-fill info-icon" data-bs-toggle="tooltip" title="The title shown on Facebook/LinkedIn cards. Should be distinct from the SEO title."></i></h6>
+                        <span class="badge @GetStatusClass(Model.OgTitleStatus)">@Model.OgTitleStatus</span>
+                    </div>
+                    <small class="text-muted d-block text-truncate">@Model.OgTitle</small>
+
+                    <div class="d-flex justify-content-between mb-2 mt-3">
+                        <h6 class="fw-bold">OG Description <i class="bi bi-info-circle-fill info-icon" data-bs-toggle="tooltip" title="The summary shown on social cards."></i></h6>
+                        <span class="badge @GetStatusClass(Model.OgDescriptionStatus)">@Model.OgDescriptionStatus</span>
+                    </div>
+                    <small class="text-muted d-block text-truncate">@Model.OgDescription</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <div class="card h-100 shadow-sm card-meta">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-3">
+                        <h6 class="fw-bold">Social Image <i class="bi bi-info-circle-fill info-icon" data-bs-toggle="tooltip" title="The thumbnail image for social shares. If missing, social sites guess (often badly)."></i></h6>
+                        <span class="badge @GetStatusClass(Model.OgImageStatus)">@Model.OgImageStatus</span>
+                    </div>
+                    @if (!string.IsNullOrEmpty(Model.OgImage))
+                    {
+                        <div class="bg-light p-2 text-center rounded">
+                            <img src="@Model.OgImage" style="max-height: 80px; max-width: 100%;" class="rounded" alt="OG Preview" />
+                            <br /><small class="text-muted d-block text-truncate mt-1" style="font-size: 0.7rem;">@Model.OgImage</small>
+                        </div>
+                    }
+                    else
+                    {
+
+                        <div class="alert alert-danger p-2 small">No Open Graph Image found</div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 shadow-sm card-meta">
+                <div class="card-body">
+                    <h6 class="fw-bold">Twitter Card <i class="bi bi-info-circle-fill info-icon" data-bs-toggle="tooltip" title="Special tags for X (Twitter) previews."></i></h6>
+                    <span class="badge @GetStatusClass(Model.TwitterStatus) mb-2">@Model.TwitterStatus</span>
+                    <small class="d-block text-muted">Type: @Model.TwitterCardType</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 shadow-sm card-meta">
+                <div class="card-body">
+                    <h6 class="fw-bold">Facebook Data <i class="bi bi-info-circle-fill info-icon" data-bs-toggle="tooltip" title="App ID ensures you get analytics data for Facebook shares."></i></h6>
+                    <span class="badge @GetStatusClass(Model.FacebookStatus) mb-2">@Model.FacebookStatus</span>
+                    <small class="d-block text-muted">App ID: @(Model.FbAppId ?? "None")</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. TECHNICAL SEO (Detailed) -->
+    <div class="row mb-5">
+        <div class="col-12"><h3 class="border-bottom pb-2 fw-bold text-secondary">5. Technical SEO</h3></div>
+
+        <div class="col-md-6 mb-3">
+            <div class="card h-100 shadow-sm card-meta">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <h6 class="fw-bold">Canonical Tag <i class="bi bi-info-circle-fill info-icon" data-bs-toggle="tooltip" title="Tells Google 'This is the master copy' of the page to prevent duplicate content penalties."></i></h6>
+                        <span class="badge @GetStatusClass(Model.CanonicalStatus)">@Model.CanonicalStatus</span>
+                    </div>
+                    <div class="bg-light p-2 rounded border small text-truncate font-monospace">@(Model.FoundCanonical ?? "Not Found")</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <div class="card h-100 shadow-sm card-meta">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <h6 class="fw-bold">Hreflang Tags <i class="bi bi-info-circle-fill info-icon" data-bs-toggle="tooltip" title="Essential for multi-language sites. Tells Google which language version to show users."></i></h6>
+                        <span class="badge @GetStatusClass(Model.HreflangStatus)">@Model.HreflangStatus</span>
+                    </div>
+                    <p class="small mb-0">Found <strong>@Model.HreflangCount</strong> tags. @(Model.HasXDefault ? "Includes x-default backup." : "")</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="card h-100 shadow-sm card-meta">
+                <div class="card-body">
+                    <h6 class="fw-bold">Favicon <i class="bi bi-info-circle-fill info-icon" data-bs-toggle="tooltip" title="The tiny icon in the browser tab. Adds trust and professionalism."></i></h6>
+                    <div class="d-flex align-items-center mt-2">
+                        @if (!string.IsNullOrEmpty(Model.FaviconUrl))
+                        {
+                            <img src="@Model.FaviconUrl" width="24" height="24" class="me-2 rounded bg-light border" />
+                        }
+                        <span class="badge @GetStatusClass(Model.FaviconStatus)">@Model.FaviconStatus</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card h-100 shadow-sm card-meta">
+                <div class="card-body">
+                    <h6 class="fw-bold">Preconnect <i class="bi bi-info-circle-fill info-icon" data-bs-toggle="tooltip" title="Speed optimization that connects to 3rd party servers (like Google Fonts) early."></i></h6>
+                    <span class="badge @GetStatusClass(Model.PreconnectStatus)">@Model.PreconnectStatus</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card h-100 shadow-sm card-meta">
+                <div class="card-body">
+                    <h6 class="fw-bold">AMP <i class="bi bi-info-circle-fill info-icon" data-bs-toggle="tooltip" title="Accelerated Mobile Pages. A specific Google format for instant mobile loading."></i></h6>
+                    <span class="badge @GetStatusClass(Model.AmpStatus)">@Model.AmpStatus</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card h-100 shadow-sm card-meta">
+                <div class="card-body">
+                    <h6 class="fw-bold">RSS Feed <i class="bi bi-info-circle-fill info-icon" data-bs-toggle="tooltip" title="Allows users/bots to subscribe to your content updates."></i></h6>
+                    <span class="badge @GetStatusClass(Model.RssStatus)">@Model.RssStatus</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. MEDIA -->
+    <div class="row mb-5">
+        <div class="col-12"><h3 class="border-bottom pb-2 fw-bold text-secondary">6. Media</h3></div>
+        <div class="col-md-6 mb-3">
+            <div class="card h-100 shadow-sm card-meta">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h6 class="fw-bold">Video Embeds <i class="bi bi-info-circle-fill info-icon" data-bs-toggle="tooltip" title="Checks if videos (YouTube/Vimeo) have titles for accessibility and if autoplay is annoying."></i></h6>
+                        <span class="badge @GetStatusClass(Model.VideoStatus)">@Model.VideoStatus</span>
+                    </div>
+                    <small>Found: @Model.VideoCount</small>
+                    @if (Model.VideoIssues.Any())
+                    {
+                        <div class="text-danger small mt-1">@string.Join(", ", Model.VideoIssues)</div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <div class="card h-100 shadow-sm card-meta">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h6 class="fw-bold">Audio Elements <i class="bi bi-info-circle-fill info-icon" data-bs-toggle="tooltip" title="Checks for audio players. They must have controls so users can stop them."></i></h6>
+                        <span class="badge @GetStatusClass(Model.AudioStatus)">@Model.AudioStatus</span>
+                    </div>
+                    <small>Found: @Model.AudioCount</small>
+                    @if (Model.AudioIssues.Any())
+                    {
+                        <div class="text-danger small mt-1">@string.Join(", ", Model.AudioIssues)</div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 7. FORMS -->
+    <div class="row mb-5">
+        <div class="col-12"><h3 class="border-bottom pb-2 fw-bold text-secondary">7. Forms</h3></div>
+        <div class="col-md-12">
+            <div class="card shadow-sm card-meta">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-3">
+                        <h5 class="fw-bold">Form Accessibility <i class="bi bi-info-circle-fill info-icon" data-bs-toggle="tooltip" title="Forms must have labels and valid code so everyone (including screen readers) can use them."></i></h5>
+                        <span class="badge @GetStatusClass(Model.FormStatus)">@Model.FormStatus</span>
+                    </div>
+                    <p>Forms Found: <strong>@Model.FormCount</strong></p>
+                    @if (Model.FormIssues.Any())
+                    {
+                        <div class="alert alert-warning p-2">
+                            <ul class="mb-0 small">
+                                @foreach (var i in Model.FormIssues)
+                                {
+                                    <li>@i</li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                    else if (Model.FormCount > 0)
+                    {
+
+                        <div class="text-success small">All forms appear accessible.</div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 8. DEPRECATIONS -->
+    <div class="row mb-5">
+        <div class="col-12"><h3 class="border-bottom pb-2 fw-bold text-secondary">8. Code Quality</h3></div>
+        <div class="col-md-6 mb-3">
+            <div class="card h-100 shadow-sm card-meta">
+                <div class="card-body">
+                    <h5 class="fw-bold">Deprecated HTML <i class="bi bi-info-circle-fill info-icon" data-bs-toggle="tooltip" title="Old HTML tags (like 'center' or 'font') that browsers may stop supporting."></i></h5>
+                    <ul class="list-group list-group-flush small mt-2">
+                        <li class="list-group-item d-flex justify-content-between"><span>Deprecated Tags</span> <strong class="@(Model.DeprecatedTagsCount > 0 ? "text-danger" : "text-success")">@Model.DeprecatedTagsCount</strong></li>
+                        <li class="list-group-item d-flex justify-content-between"><span>Inline Styles</span> <strong class="@(Model.InlineStylesCount > 10 ? "text-warning" : "text-success")">@Model.InlineStylesCount</strong></li>
+                        <li class="list-group-item d-flex justify-content-between"><span>Flash Content</span> <strong class="@(Model.HasFlash ? "text-danger" : "text-success")">@Model.HasFlash</strong></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <div class="card h-100 shadow-sm card-meta">
+                <div class="card-body">
+                    <h5 class="fw-bold">DOM Complexity <i class="bi bi-info-circle-fill info-icon" data-bs-toggle="tooltip" title="The number of elements on your page. Too many (>1500) makes the page slow to render."></i></h5>
+                    <div class="text-center py-3">
+                        <h3 class="@(Model.DomNodeCount > 1500 ? "text-warning" : "text-success")">@Model.DomNodeCount</h3>
+                        <small class="text-muted">Total Elements (Ideal: &lt; 1500)</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 9. ACCESSIBILITY -->
+    <div class="row mb-5">
+        <div class="col-12"><h3 class="border-bottom pb-2 fw-bold text-secondary">9. Accessibility</h3></div>
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 shadow-sm card-meta">
+                <div class="card-body">
+                    <h5 class="fw-bold">Landmarks <i class="bi bi-info-circle-fill info-icon" data-bs-toggle="tooltip" title="Major page sections (Nav, Main, Footer) defined in code for screen readers."></i></h5>
+                    <div class="d-flex flex-column gap-2 mt-2">
+                        <span class="badge @(Model.HasMainLandmark ? "bg-success" : "bg-warning")">Main</span>
+                        <span class="badge @(Model.HasNavLandmark ? "bg-success" : "bg-secondary")">Nav</span>
+                        <span class="badge @(Model.HasFooterLandmark ? "bg-success" : "bg-secondary")">Footer</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 shadow-sm card-meta">
+                <div class="card-body text-center">
+                    <h5 class="fw-bold">Skip Link <i class="bi bi-info-circle-fill info-icon" data-bs-toggle="tooltip" title="A hidden link at the top allowing keyboard users to jump straight to content."></i></h5>
+                    <h2 class="mt-3"><i class="bi @(Model.HasSkipLink ? "bi-check-circle-fill text-success" : "bi-x-circle-fill text-warning")"></i></h2>
+                    <small>@(Model.HasSkipLink ? "Present" : "Missing")</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 shadow-sm card-meta">
+                <div class="card-body text-center">
+                    <h5 class="fw-bold">Tab Index <i class="bi bi-info-circle-fill info-icon" data-bs-toggle="tooltip" title="Manually setting tab order is bad practice and confuses keyboard navigation."></i></h5>
+                    <h2 class="mt-3 @(Model.TabIndexIssues > 0 ? "text-danger" : "text-success")">@Model.TabIndexIssues</h2>
+                    <small>Issues Found</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 10. CONTENT QUALITY -->
+    <div class="row mb-5">
+        <div class="col-12"><h3 class="border-bottom pb-2 fw-bold text-secondary">10. Content Quality</h3></div>
+        <div class="col-md-6 mb-3">
+            <div class="card h-100 shadow-sm card-meta">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-3"><h5 class="fw-bold">Readability <i class="bi bi-info-circle-fill info-icon" data-bs-toggle="tooltip" title="Flesch Score measures how easy your text is to read. Higher is easier."></i></h5><span class="badge @GetStatusClass(Model.ContentQualityStatus)">@Model.ContentQualityStatus</span></div>
+                    <div class="row text-center">
+                        <div class="col-6 border-end">
+                            <h4>@Model.FleschReadingEase</h4>
+                            <small class="text-muted">Flesch Score</small>
+                        </div>
+                        <div class="col-6">
+                            <h4>@Model.AverageSentenceLength</h4>
+                            <small class="text-muted">Avg. Words/Sentence</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <div class="card h-100 shadow-sm card-meta">
+                <div class="card-body">
+                    <h5 class="fw-bold">E-E-A-T Signals <i class="bi bi-info-circle-fill info-icon" data-bs-toggle="tooltip" title="Experience, Expertise, Authoritativeness, Trust. Google likes knowing who wrote the content."></i></h5>
+                    <ul class="list-group list-group-flush small mt-3">
+                        <li class="list-group-item"><strong>Author:</strong> @(Model.Author ?? "Not specified")</li>
+                        <li class="list-group-item"><strong>Published:</strong> @(Model.PublishedDate ?? "Not detected")</li>
+                        <li class="list-group-item"><strong>Modified:</strong> @(Model.ModifiedDate ?? "Not detected")</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 11. SCHEMA -->
+    <div class="row mb-5">
+        <div class="col-12"><h3 class="border-bottom pb-2 fw-bold text-secondary">11. Structured Data</h3></div>
+        <div class="col-md-12">
+            <div class="card shadow-sm card-meta">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-3"><h5 class="fw-bold">Schema Types <i class="bi bi-info-circle-fill info-icon" data-bs-toggle="tooltip" title="Hidden JSON code that helps Google display Rich Snippets (stars, prices, events)."></i></h5><span class="badge @GetStatusClass(Model.StructuredDataStatus)">@Model.StructuredDataStatus</span></div>
+                    @if (Model.SchemaTypes.Any())
+                    {
+                        <div class="d-flex flex-wrap gap-2">
+                            @foreach (var type in Model.SchemaTypes)
+                            {
+                                <span class="badge bg-primary">@type</span>
+                            }
+                        </div>
+                        @if (Model.SchemaDetails.Any())
+                        {
+                            <hr>
+                            <div class="row small">
+                                @foreach (var kvp in Model.SchemaDetails)
+                                {
+                                    <div class="col-md-3 mb-2"><strong>@kvp.Key:</strong> @kvp.Value</div>
+                                }
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p class="text-muted">No structured data found.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@functions {
+    string GetStatusClass(string status)
+    {
+        if (string.IsNullOrEmpty(status)) return "bg-secondary";
+        if (status.Contains("Good")) return "bg-success";
+        if (status.Contains("Critical")) return "bg-danger";
+        if (status.Contains("Warning")) return "bg-warning text-dark";
+        return "bg-info text-dark";
+    }
+
+    string GetGradeClass(string grade)
+    {
+        return grade.ToLower();
+    }
+
+    string GetScoreColor(int score)
+    {
+        if (score >= 90) return "bg-score-excellent";
+        if (score >= 70) return "bg-score-good";
+        if (score >= 50) return "bg-score-fair";
+        return "bg-score-poor";
+    }
+}
