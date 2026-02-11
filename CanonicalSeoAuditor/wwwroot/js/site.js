@@ -1,11 +1,4 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-document.addEventListener("DOMContentLoaded", function () {
-
-    // =========================================================
-    // 1. SEO Audit Loading State Logic  (original — untouched)
-    // =========================================================
+﻿document.addEventListener("DOMContentLoaded", function () {
     var auditForm = document.getElementById('auditForm');
     var loadingOverlay = document.getElementById('loadingOverlay');
 
@@ -15,17 +8,11 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // =========================================================
-    // 2. Initialize Bootstrap Tooltips  (original — untouched)
-    // =========================================================
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl);
     });
 
-    // =========================================================
-    // 3. Scroll-triggered card reveal (Intersection Observer)
-    // =========================================================
     var cards = document.querySelectorAll('.card-meta');
 
     if (cards.length > 0 && 'IntersectionObserver' in window) {
@@ -42,21 +29,15 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         cards.forEach(function (card, i) {
-            // stagger each card slightly
             card.style.transitionDelay = (i % 4) * 60 + 'ms';
             observer.observe(card);
         });
     } else {
-        // Fallback: just make all cards visible immediately
         cards.forEach(function (card) {
             card.classList.add('visible');
         });
     }
 
-    // =========================================================
-    // 4. Animated score counter on Results page
-    //    Targets the large display-3 number inside .score-circle
-    // =========================================================
     var scoreEl = document.querySelector('.score-circle .display-3');
 
     if (scoreEl) {
@@ -69,7 +50,6 @@ document.addEventListener("DOMContentLoaded", function () {
             function animateCount(timestamp) {
                 if (!startTime) startTime = timestamp;
                 var progress = Math.min((timestamp - startTime) / duration, 1);
-                // ease-out cubic
                 var ease = 1 - Math.pow(1 - progress, 3);
                 scoreEl.textContent = Math.round(start + (target - start) * ease);
                 if (progress < 1) {
@@ -83,10 +63,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // =========================================================
-    // 5. Animated loading messages cycle
-    //    Cycles descriptive messages while the overlay is open
-    // =========================================================
     if (loadingOverlay) {
         var msgEl = loadingOverlay.querySelector('p');
         var messages = [
@@ -113,5 +89,4 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
-
 });

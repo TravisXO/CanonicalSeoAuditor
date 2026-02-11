@@ -1,16 +1,5 @@
-/* ========================================
-   SHAMIL PALETTE
-   --lapis:     #1B2D4F  (Strength)
-   --amber:     #C97B2F  (Honour)
-   --bloom:     #C25B52  (Ambition)
-   --teal:      #2E6E65  (Mastery)
-   --saffron:   #E8AA3A  (Insight)
-   --parchment: #F0E0C4  (Legacy)
-   ======================================== */
-
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Outfit:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap');
 
-/* === CSS VARIABLES === */
 :root {
     --lapis: #1B2D4F;
     --amber: #C97B2F;
@@ -32,7 +21,6 @@
     --font-mono: 'Fira Code', monospace;
 }
 
-/* === RESET & BASE === */
 html {
     font-size: 14px;
     scroll-behavior: smooth;
@@ -54,7 +42,6 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* === FOCUS RING === */
 .btn:focus,
 .btn:active:focus,
 .btn-link.nav-link:focus,
@@ -63,9 +50,6 @@ body {
     box-shadow: 0 0 0 0.1rem var(--bg-deep), 0 0 0 0.3rem rgba(201, 123, 47, 0.45);
 }
 
-/* ========================================
-   NAVBAR
-   ======================================== */
 header nav.navbar {
     background-color: var(--bg-surface) !important;
     border-bottom: 1px solid var(--border-amber) !important;
@@ -137,9 +121,6 @@ header nav.navbar {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(201,123,47,0.85)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
 
-/* ========================================
-   FOOTER
-   ======================================== */
 footer.border-top.footer {
     background-color: var(--bg-surface);
     border-top: 1px solid var(--border-amber) !important;
@@ -160,9 +141,6 @@ footer.footer a {
         color: var(--saffron);
     }
 
-/* ========================================
-   BOOTSTRAP OVERRIDES — DARK THEME
-   ======================================== */
 .card {
     background-color: var(--bg-card);
     border-color: var(--border-dim);
@@ -184,7 +162,6 @@ footer.footer a {
     border-bottom: 2px solid var(--amber) !important;
 }
 
-/* Dark surface */
 .bg-dark {
     background-color: var(--lapis) !important;
 }
@@ -193,7 +170,6 @@ footer.footer a {
     background-color: rgba(255, 255, 255, 0.04) !important;
 }
 
-/* Text */
 .text-dark {
     color: var(--parchment) !important;
 }
@@ -222,7 +198,6 @@ footer.footer a {
     color: var(--saffron) !important;
 }
 
-/* Borders */
 .border-bottom {
     border-bottom-color: var(--border-dim) !important;
 }
@@ -236,7 +211,6 @@ footer.footer a {
     border-color: var(--border-dim) !important;
 }
 
-/* Forms */
 .form-control {
     background-color: var(--bg-surface);
     border-color: var(--border-amber);
@@ -266,7 +240,6 @@ footer.footer a {
     color: var(--text-dim) !important;
 }
 
-/* Buttons */
 .btn-primary {
     background-color: var(--amber);
     border-color: var(--amber);
@@ -305,7 +278,6 @@ footer.footer a {
     filter: invert(1) opacity(0.6);
 }
 
-/* Badges */
 .badge {
     font-family: var(--font-body);
     font-weight: 500;
@@ -355,14 +327,12 @@ footer.footer a {
     border: 1px solid rgba(138, 155, 176, 0.15) !important;
 }
 
-/* List groups */
 .list-group-item {
     background-color: transparent;
     border-color: var(--border-dim);
     color: var(--text-main);
 }
 
-/* Alerts */
 .alert-danger {
     background-color: rgba(194, 91, 82, 0.12);
     border-color: rgba(194, 91, 82, 0.4);
@@ -375,14 +345,12 @@ footer.footer a {
     color: var(--saffron);
 }
 
-/* Progress bars */
 .progress {
     background-color: rgba(255, 255, 255, 0.06);
     border-radius: 100px;
     overflow: hidden;
 }
 
-/* Code / mono */
 code {
     color: var(--saffron);
     font-family: var(--font-mono);
@@ -395,20 +363,15 @@ code {
     font-family: var(--font-mono) !important;
 }
 
-/* Typography overrides */
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
 }
 
-/* Shadow utilities */
 .shadow,
 .shadow-sm {
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35) !important;
 }
 
-/* ========================================
-   LOADING OVERLAY
-   ======================================== */
 #loadingOverlay {
     position: fixed;
     top: 0;
@@ -417,7 +380,7 @@ h1, h2, h3, h4, h5, h6 {
     height: 100%;
     background-color: rgba(11, 17, 24, 0.97);
     z-index: 9999;
-    display: none; /* toggled by JS */
+    display: none;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -468,9 +431,6 @@ h1, h2, h3, h4, h5, h6 {
     }
 }
 
-/* ========================================
-   RESULT DASHBOARD STYLES
-   ======================================== */
 .status-badge {
     width: 100px;
     text-align: center;
@@ -498,7 +458,6 @@ h1, h2, h3, h4, h5, h6 {
     overflow-y: auto;
 }
 
-/* Score Circle */
 .score-circle {
     width: 150px;
     height: 150px;
@@ -535,7 +494,6 @@ h1, h2, h3, h4, h5, h6 {
         box-shadow: 0 0 30px rgba(194, 91, 82, 0.2);
     }
 
-/* Custom Backgrounds for Progress Bars */
 .bg-score-excellent {
     background-color: #22C55E !important;
 }
@@ -552,7 +510,6 @@ h1, h2, h3, h4, h5, h6 {
     background-color: var(--bloom) !important;
 }
 
-/* Tooltip / info icon */
 .info-icon {
     cursor: help;
     font-size: 0.9rem;
@@ -565,11 +522,6 @@ h1, h2, h3, h4, h5, h6 {
         color: var(--saffron);
     }
 
-/* ========================================
-   RESULTS PAGE SPECIFIC
-   ======================================== */
-
-/* Section headings */
 h3.border-bottom.pb-2.fw-bold {
     font-family: var(--font-display);
     font-size: 0.78rem;
@@ -579,7 +531,6 @@ h3.border-bottom.pb-2.fw-bold {
     border-bottom-color: var(--border-amber) !important;
 }
 
-/* URL header card */
 .card.shadow-sm.border-0.mb-4.bg-dark.text-white {
     background: linear-gradient(135deg, var(--lapis) 0%, #0A1520 100%) !important;
     border: 1px solid var(--border-amber) !important;
@@ -604,13 +555,11 @@ h3.border-bottom.pb-2.fw-bold {
     color: var(--text-sub) !important;
 }
 
-/* Score dashboard card (shadow border-0) */
 .card.shadow.border-0 {
     border: 1px solid var(--border-amber) !important;
     background: linear-gradient(135deg, var(--bg-card) 0%, #0E1A26 100%);
 }
 
-    /* Category breakdown section */
     .card.shadow.border-0 h5.text-uppercase.text-muted {
         font-family: var(--font-body);
         font-size: 0.7rem;
@@ -625,13 +574,11 @@ h3.border-bottom.pb-2.fw-bold {
         letter-spacing: 0.06em;
     }
 
-/* OG image preview */
 .bg-light.p-2.text-center.rounded {
     background-color: rgba(255, 255, 255, 0.03) !important;
     border: 1px solid var(--border-dim);
 }
 
-/* Canonical tag monospace field */
 .bg-light.p-2.rounded.border.small.text-truncate {
     background-color: rgba(0,0,0,0.2) !important;
     border-color: var(--border-dim) !important;
@@ -640,9 +587,6 @@ h3.border-bottom.pb-2.fw-bold {
     font-size: 0.78rem !important;
 }
 
-/* ========================================
-   INDEX PAGE SPECIFIC
-   ======================================== */
 .audit-hero {
     padding: 3rem 0 1.5rem;
     text-align: center;
@@ -689,9 +633,6 @@ h3.border-bottom.pb-2.fw-bold {
         font-size: 0.85rem;
     }
 
-/* ========================================
-   SCROLL FADE-IN (added by JS)
-   ======================================== */
 .card-meta {
     opacity: 0;
     transform: translateY(16px);
@@ -707,9 +648,6 @@ h3.border-bottom.pb-2.fw-bold {
             transform: translateY(-4px);
         }
 
-/* ========================================
-   PRINT
-   ======================================== */
 @media print {
     body {
         background: white !important;
